@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Para ti, mi amor 💗</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── CONFETI ── -->
+<div id="confettiContainer"></div>
+
+<!-- ── CANVAS PARTÍCULAS ── -->
+<canvas id="particlesCanvas"></canvas>
+
+<!-- ── NOTIFICACIÓN ── -->
+<div id="globalNotif" class="global-notif"></div>
+
+<!-- ══════════════════════════════════════════
+     PANTALLA INICIAL — CARTA QUE SE ABRE CON CLICS
+══════════════════════════════════════════ -->
+<div id="introScreen" class="intro-screen">
+  <div class="intro-hearts-bg" id="introHeartsBg"></div>
+  <div class="intro-card" id="introCard">
+
+    <!-- Título -->
+    <div class="intro-title-wrap">
+      <span class="intro-emoji-top">💌💗💌</span>
+      <h1 class="intro-title" id="introTitle">Tengo algo especial para ti</h1>
+      <p class="intro-subtitle" id="introSubtitle">Aprieta la carta para abrirlo... 💝</p>
+      <div class="intro-divider">— ♡ —</div>
+    </div>
+
+    <!-- Mini carrusel automático -->
+    <div class="auto-carousel" id="autoCarousel"></div>
+
+    <!-- Barra de progreso de clics -->
+    <div class="gift-progress-wrap">
+      <div class="gift-progress-bar-outer">
+        <div class="gift-progress-bar-inner" id="giftProgressBar" style="width:0%"></div>
+      </div>
+      <p class="gift-click-label" id="giftClickLabel">Toca la carta 💗</p>
+    </div>
+
+  </div><!-- /intro-card -->
+</div>
+
+<!-- ══════════════════════════════════════════
+     INTERFAZ PRINCIPAL
+══════════════════════════════════════════ -->
+<div id="mainApp" class="main-app hidden">
+
+  <!-- Barra de progreso global -->
+  <div class="global-progress-bar" id="globalProgressBar">
+    <span class="gp-icon">💗</span>
+    <span class="gp-label" id="gpLabel">Progreso: 0/2 secciones</span>
+    <div class="gp-bar-outer">
+      <div class="gp-bar-inner" id="gpBarInner" style="width:0%"></div>
+    </div>
+    <span class="gp-pct" id="gpPct">0%</span>
+  </div>
+
+  <!-- Reproductor global -->
+  <div class="global-player" id="globalPlayer">
+    <button class="gp-toggle-btn" id="gpToggleBtn">🎵</button>
+    <div class="gp-panel" id="gpPanel">
+      <div class="gp-header">
+        <span class="gp-note">♪</span>
+        <span class="gp-song-name" id="gpSongName">♪ Nuestra canción ♪</span>
+        <span class="gp-song-num" id="gpSongNum">1/5</span>
+      </div>
+      <div class="gp-progress-row">
+        <span class="gp-time" id="gpCurTime">0:00</span>
+        <div class="gp-progress-track" id="gpProgressTrack">
+          <div class="gp-progress-fill" id="gpProgressFill"></div>
+          <div class="gp-progress-thumb" id="gpProgressThumb"></div>
+        </div>
+        <span class="gp-time" id="gpTotalTime">0:00</span>
+      </div>
+      <div class="gp-controls">
+        <button class="gp-btn" id="gpPrevBtn">⏮</button>
+        <button class="gp-btn gp-play" id="gpPlayBtn">▶</button>
+        <button class="gp-btn" id="gpNextBtn">⏭</button>
+      </div>
+      <div class="gp-vol-row">
+        <span>🔈</span>
+        <input type="range" id="gpVolSlider" class="gp-vol-slider" min="0" max="1" step="0.01" value="0.7">
+        <span>🔊</span>
+      </div>
+    </div>
+  </div>
+  <audio id="globalAudio"></audio>
+
+  <!-- Menú -->
+  <div class="main-menu" id="mainMenu">
+    <div class="menu-title-wrap">
+      <h2 class="menu-title">Para ti, mi amor 💗</h2>
+      <p class="menu-subtitle">Con todo mi corazón, te dedico esto 🌸</p>
+    </div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+
+  <!-- ── SECCIÓN 1: CARRUSEL DE AMOR ── -->
+  <section class="sec-panel hidden" id="sec1">
+    <div class="sec-header">
+      <button class="back-btn" onclick="closeSection(1)">← Volver</button>
+      <h2 class="sec-title">💌 Carrusel de Amor 💌</h2>
+    </div>
+    <div class="carousel-wrap">
+      <button class="nav-btn prev-btn" id="sec1Prev">❮</button>
+      <div class="carousel-viewport" id="sec1Carousel"></div>
+      <button class="nav-btn next-btn" id="sec1Next">❯</button>
+    </div>
+    <div class="carousel-progress">
+      <span id="sec1ProgressText">Imagen 1 de 5 💗</span>
+      <div class="cp-bar-outer"><div class="cp-bar-inner" id="sec1ProgressBar"></div></div>
+    </div>
+    <div class="carousel-dots" id="sec1Dots"></div>
+  </section>
+
+  <!-- ── SECCIÓN 2: CARTA INTERACTIVA ── -->
+  <section class="sec-panel hidden" id="sec2">
+    <div class="sec-header">
+      <button class="back-btn" onclick="closeSection(2)">← Volver</button>
+      <h2 class="sec-title">💝 Carta de Amor 💝</h2>
+    </div>
+    <div id="sec2Container"></div>
+  </section>
+
+</div><!-- /mainApp -->
+
+<!-- ── MODAL SOBRE ANIMADO ── -->
+<div id="sobreModal" class="sobre-modal hidden">
+  <div class="sobre-backdrop" onclick="closeSobre()"></div>
+  <div class="sobre-container" id="sobreContainer">
+    <div class="sobre-envelope" id="sobreEnvelope">
+      <div class="sobre-flap" id="sobreFlap"></div>
+      <div class="sobre-body"><div class="sobre-heart">💌</div></div>
+    </div>
+    <div class="sobre-content" id="sobreContent" style="display:none">
+      <button class="sobre-close" onclick="closeSobre()">✕</button>
+      <img class="sobre-img" id="sobreImg" src="" alt="" onerror="this.style.display='none'">
+      <div class="sobre-titulo" id="sobreTitulo"></div>
+      <div class="sobre-frase" id="sobreFrase"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL FINAL ── -->
+<div id="finalModal" class="final-modal hidden">
+  <div class="final-content">
+    <button class="final-close" onclick="closeFinalModal()">✕</button>
+    <div class="final-emoji">🎉💗🎉</div>
+    <div class="final-titulo">¡Regalo completado!</div>
+    <img class="final-img" id="finalImg" src="" alt="" onerror="this.style.display='none'">
+    <div class="final-msg" id="finalMsg"></div>
+    <button class="final-btn" onclick="closeFinalModal()">Te amo mucho 💗</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
