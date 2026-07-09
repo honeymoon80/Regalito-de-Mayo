@@ -1,6 +1,6 @@
 /* =============================================
    SCRIPT.JS — Regalo de Amor (SOLO SECCIÓN 1)
-   CON MÚSICA
+   CON MÚSICA — CON FRASES DESDE JSON
    ============================================= */
 'use strict';
 
@@ -13,32 +13,6 @@ const CLICS_NECESARIOS = 20;
 const TITULO_CARTA_INICIAL = "💌 Tengo algo especial para ti 💌";
 const SUBTITULO_CARTA_INICIAL = "Aprieta la carta para abrirlo... 💝";
 const MENSAJE_APERTURA = "¡Para ti, mi amor! 💖";
-
-// ── Mini carrusel automático (pantalla inicial) ─
-const TOTAL_FOTOS_CARRUSEL_AUTO = 6;
-const FRASES_CARRUSEL_AUTO = [
-  "💗You're my universe💗",
-  "❤️Te AMO❤️",
-  "🌸you're PERFECT🌸",
-  "💗My life forever💗",
-  "💓my gorgeous girl💓",
-  "💐Together forever💐"
-];
-
-// ── Sección 1 — Carrusel de amor ─────────────
-const TOTAL_SLIDES_CARRUSEL = 10;
-const FRASES_AMOR_CARRUSEL = [
-  "tii AMOO mushote mi princeshita bella:3💗",
-  "eresh mi bellíshima luceshita de miel🥺💗✨",
-  "kontigo SIEMPRE woa sel muii FELISH😸💗💞",
-  "MI sueñito hesho realidad y mi realidad hesha sueñito^v^💓💤",
-  "SIEMPRE estaré bem juntito a ti FOREVER:)💗🌟",
-  "eresh toditita mi razhón de SER my gud baby🥺💗💐",
-  "SIEMPRE serásh toditito mi mundito entero🫶💗💞",
-  "eresh mi másh bellíshima MOTIVACIÓN HEHE:D🎉💓✨️",
-  "te ADORO kon mushísima PASIÓN!!(≧▽≦)💗💞",
-  "I love you very much FOREVER my gorgeous girl:)❤️✨️"
-];
 
 // ── Menú (tarjetas) ── SOLO SECCIÓN 1 ────────
 const MENU_OPCIONES = [
@@ -120,9 +94,65 @@ const gpPct         = document.getElementById('gpPct');
 const menuGrid      = document.getElementById('menuGrid');
 
 // ════════════════════════════════════════════
+// CARGAR FRASES DESDE JSON
+// ════════════════════════════════════════════
+
+// Variables que se llenarán desde el JSON
+let TOTAL_FOTOS_CARRUSEL_AUTO = 6;
+let FRASES_CARRUSEL_AUTO = [];
+let TOTAL_SLIDES_CARRUSEL = 10;
+let FRASES_AMOR_CARRUSEL = [];
+
+async function cargarFrases() {
+  try {
+    const respuesta = await fetch('frases.json');
+    const datos = await respuesta.json();
+    
+    FRASES_CARRUSEL_AUTO = datos.frases_carrusel_auto;
+    FRASES_AMOR_CARRUSEL = datos.frases_amor_carrusel;
+    
+    TOTAL_FOTOS_CARRUSEL_AUTO = FRASES_CARRUSEL_AUTO.length;
+    TOTAL_SLIDES_CARRUSEL = FRASES_AMOR_CARRUSEL.length;
+    
+    console.log('✅ Frases cargadas correctamente desde JSON');
+    console.log('📸 Carrusel auto:', FRASES_CARRUSEL_AUTO.length, 'frases');
+    console.log('💗 Carrusel amor:', FRASES_AMOR_CARRUSEL.length, 'frases');
+    
+  } catch (error) {
+    console.error('❌ Error al cargar frases:', error);
+    // Fallback: usar frases por defecto (sin caracteres raros)
+    FRASES_CARRUSEL_AUTO = [
+      'Eres mi todo 💗',
+      'Te amo ✨',
+      'Eres perfecta 🌸',
+      'Mi vida 💕',
+      'Mi felicidad 💖',
+      'Siempre juntos 🌷'
+    ];
+    FRASES_AMOR_CARRUSEL = [
+      'Te amo con toda mi alma 💗',
+      'Eres la luz de mi vida ✨',
+      'Contigo todo es mejor 🌸',
+      'Eres mi sueño hecho realidad 💕',
+      'Por siempre juntos 💖',
+      'Eres mi razón de ser 🌷',
+      'Mi mundo eres tú 💫',
+      'Eres mi felicidad 💞',
+      'Te amo infinitamente 💝',
+      'Eres mi todo 🌺'
+    ];
+    TOTAL_FOTOS_CARRUSEL_AUTO = FRASES_CARRUSEL_AUTO.length;
+    TOTAL_SLIDES_CARRUSEL = FRASES_AMOR_CARRUSEL.length;
+  }
+}
+
+// ════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Cargar frases primero
+  await cargarFrases();
+  
   const titleEl = document.getElementById('introTitle');
   const subEl   = document.getElementById('introSubtitle');
   if (titleEl) titleEl.textContent = TITULO_CARTA_INICIAL;
