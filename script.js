@@ -1,5 +1,6 @@
 /* =============================================
    SCRIPT.JS — Regalo de Amor (SOLO SECCIÓN 1)
+   CON MÚSICA
    ============================================= */
 'use strict';
 
@@ -42,12 +43,20 @@ const FRASES_AMOR_CARRUSEL = [
 // ── Menú (tarjetas) ── SOLO SECCIÓN 1 ────────
 const MENU_OPCIONES = [
   { img:'assets/menu/menu1.webp', emoji:'💌', titulo:'Carrusel de Amor', seccion:1 },
-  // SECCIÓN 2 DESHABILITADA
 ];
 
 // ── Modal final al completar ──────────────────
 const MENSAJE_FINAL_REGALO = '🎉 ¡Has completado el regalo! 🎉\n\nGracias por ser tú, por estar a mi lado, por ser mi compañera de vida. Eres el amor de mi vida y cada día a tu lado es un regalo. Te amo infinitamente. 💗';
 const IMAGEN_FINAL_REGALO  = 'assets/final/regalo_completo.webp';
+
+// ── Playlist (música) ─────────────────────────
+const PLAYLIST_REGALO = [
+  { name:'Nuestra Canción 1 ♪', src:'assets/songs/song1.mp3' },
+  { name:'Nuestra Canción 2 ♪', src:'assets/songs/song2.mp3' },
+  { name:'Nuestra Canción 3 ♪', src:'assets/songs/song3.mp3' },
+  { name:'Nuestra Canción 4 ♪', src:'assets/songs/song4.mp3' },
+  { name:'Nuestra Canción 5 ♪', src:'assets/songs/song5.mp3' },
+];
 
 // Palabras para partículas de clic
 const PARTICLE_WORDS = [
@@ -137,7 +146,32 @@ document.addEventListener('DOMContentLoaded', () => {
     spawnParticles(e.touches[0].clientX, e.touches[0].clientY, 6, false);
   }, {passive:true});
 
-  // Música simplificada
+  // Música global
+  globalAudio.volume = 0.7;
+  if (PLAYLIST_REGALO.length) loadGlobalSong(0, false);
+  gpPlayBtn.addEventListener('click', e => { e.stopPropagation(); toggleGlobalPlay(); });
+  gpPrevBtn.addEventListener('click', e => { e.stopPropagation(); changeGlobalSong(-1); });
+  gpNextBtn.addEventListener('click', e => { e.stopPropagation(); changeGlobalSong(1); });
+  gpToggleBtn.addEventListener('click', e => { e.stopPropagation(); toggleGP(); });
+  globalAudio.addEventListener('timeupdate', updateAudioProgress);
+  globalAudio.addEventListener('ended', () => changeGlobalSong(1));
+  globalAudio.addEventListener('play',  () => { globalPlaying=true;  gpPlayBtn.textContent='⏸'; });
+  globalAudio.addEventListener('pause', () => { globalPlaying=false; gpPlayBtn.textContent='▶'; });
+  if (gpProgressTrack) {
+    gpProgressTrack.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!globalAudio.duration) return;
+      const r = gpProgressTrack.getBoundingClientRect();
+      globalAudio.currentTime = ((e.clientX - r.left) / r.width) * globalAudio.duration;
+    });
+  }
+  if (gpVolSlider) gpVolSlider.addEventListener('input', e => {
+    e.stopPropagation();
+    globalAudio.volume = e.target.value;
+    const pct = e.target.value * 100;
+    e.target.style.background = `linear-gradient(90deg,var(--pink-main) ${pct}%,rgba(251,182,206,0.4) ${pct}%)`;
+  });
+
   document.getElementById('modalCloseBtn')?.addEventListener('click', closeModal);
   document.getElementById('genericModal')?.addEventListener('click', e => { if (e.target === document.getElementById('genericModal')) closeModal(); });
 
@@ -179,6 +213,9 @@ function abrirRegalo() {
   launchConfetti(130);
   spawnParticles(window.innerWidth/2, window.innerHeight/2, 28, true);
   showNotif(MENSAJE_APERTURA);
+
+  // Iniciar música
+  initMusic();
 
   introScreen.style.transition = 'opacity 0.9s, transform 0.9s';
   introScreen.style.opacity = '0';
@@ -394,6 +431,57 @@ function updateSec1Progress() {
   if (pb) pb.style.width = ((sec1Slide + 1) / TOTAL_SLIDES_CARRUSEL * 100) + '%';
   document.querySelectorAll('#sec1Dots .c-dot').forEach((d, i) =>
     d.classList.toggle('active', i === sec1Slide));
+}
+
+// ════════════════════════════════════════════
+// MÚSICA GLOBAL
+// ════════════════════════════════════════════
+function initMusic() {
+  if (!PLAYLIST_REGALO.length) return;
+  loadGlobalSong(0, false);
+  const tryPlay = () => {
+    globalAudio.play().catch(() => {});
+    document.removeEventListener('click',      tryPlay);
+    document.removeEventListener('touchstart', tryPlay);
+  };
+  document.addEventListener('click',      tryPlay, {once:true});
+  document.addEventListener('touchstart', tryPlay, {once:true, passive:true});
+  setTimeout(() => globalAudio.play().catch(() => {}), 400);
+}
+
+function loadGlobalSong(idx, play = true) {
+  globalSongIdx = ((idx % PLAYLIST_REGALO.length) + PLAYLIST_REGALO.length) % PLAYLIST_REGALO.length;
+  const s = PLAYLIST_REGALO[globalSongIdx];
+  globalAudio.src = s.src;
+  if (gpSongName) gpSongName.textContent = s.name;
+  if (gpSongNum)  gpSongNum.textContent  = `${globalSongIdx+1}/${PLAYLIST_REGALO.length}`;
+  if (play && globalPlaying) globalAudio.play().catch(() => {});
+  updateAudioProgress();
+}
+
+function toggleGlobalPlay() {
+  if (globalPlaying) globalAudio.pause();
+  else globalAudio.play().catch(() => {});
+}
+function changeGlobalSong(dir) { loadGlobalSong(globalSongIdx + dir, true); }
+
+function updateAudioProgress() {
+  if (!globalAudio.duration) return;
+  const pct = globalAudio.currentTime / globalAudio.duration * 100;
+  if (gpProgressFill)  gpProgressFill.style.width = pct + '%';
+  if (gpProgressThumb) gpProgressThumb.style.left  = pct + '%';
+  if (gpCurTime)   gpCurTime.textContent   = fmtTime(globalAudio.currentTime);
+  if (gpTotalTime) gpTotalTime.textContent = fmtTime(globalAudio.duration);
+}
+
+function fmtTime(s) {
+  if (isNaN(s)) return '0:00';
+  const m = Math.floor(s/60), ss = Math.floor(s%60);
+  return m + ':' + (ss < 10 ? '0' : '') + ss;
+}
+function toggleGP() {
+  gpMinimized = !gpMinimized;
+  gpPanel?.classList.toggle('minimized', gpMinimized);
 }
 
 // ════════════════════════════════════════════
