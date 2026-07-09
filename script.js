@@ -17,27 +17,27 @@ const MENSAJE_APERTURA = "¡Para ti, mi amor! 💖";
 // ── Mini carrusel automático (pantalla inicial) ─
 const TOTAL_FOTOS_CARRUSEL_AUTO = 6;
 const FRASES_CARRUSEL_AUTO = [
-  '💗You're my universe💗',
-  '❤️Te AMO❤️',
-  '🌸you're PERFECT🌸',
-  '💗My life forever💗',
-  '💓my gorgeous girl💓',
-  '💐Together forever💐',
+  "💗You're my universe💗",
+  "❤️Te AMO❤️",
+  "🌸you're PERFECT🌸",
+  "💗My life forever💗",
+  "💓my gorgeous girl💓",
+  "💐Together forever💐"
 ];
 
 // ── Sección 1 — Carrusel de amor ─────────────
 const TOTAL_SLIDES_CARRUSEL = 10;
 const FRASES_AMOR_CARRUSEL = [
-  'tii AMOO mushote mi princeshita bella:3💗',
-  'eresh mi bellíshima luceshita de miel🥺💗✨',
-  'kontigo SIEMPRE woa sel muii FELISH😸💗💞',
-  'MI sueñito hesho realidad y mi realidad hesha sueñito^v^💓💤',
-  'SIEMPRE estaré bem juntito a ti FOREVER:)💗🌟',
-  'eresh toditita mi razhón de SER my gud baby🥺💗💐',
-  'SIEMPRE serásh toditito mi mundito entero🫶💗💞',
-  'eresh mi másh bellíshima MOTIVACIÓN HEHE:D🎉💓✨️',
-  'te ADORO kon mushísima PASIÓN!!(≧▽≦)💗💞',
-  'I love you very much FOREVER my gorgeous girl:)❤️✨️'
+  "tii AMOO mushote mi princeshita bella:3💗",
+  "eresh mi bellíshima luceshita de miel🥺💗✨",
+  "kontigo SIEMPRE woa sel muii FELISH😸💗💞",
+  "MI sueñito hesho realidad y mi realidad hesha sueñito^v^💓💤",
+  "SIEMPRE estaré bem juntito a ti FOREVER:)💗🌟",
+  "eresh toditita mi razhón de SER my gud baby🥺💗💐",
+  "SIEMPRE serásh toditito mi mundito entero🫶💗💞",
+  "eresh mi másh bellíshima MOTIVACIÓN HEHE:D🎉💓✨️",
+  "te ADORO kon mushísima PASIÓN!!(≧▽≦)💗💞",
+  "I love you very much FOREVER my gorgeous girl:)❤️✨️"
 ];
 
 // ── Menú (tarjetas) ── SOLO SECCIÓN 1 ────────
