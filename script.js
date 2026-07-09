@@ -17,27 +17,27 @@ const MENSAJE_APERTURA = "¡Para ti, mi amor! 💖";
 // ── Mini carrusel automático (pantalla inicial) ─
 const TOTAL_FOTOS_CARRUSEL_AUTO = 6;
 const FRASES_CARRUSEL_AUTO = [
-  'Eres mi todo 💗',
-  'Te amo ✨',
-  'Eres perfecta 🌸',
-  'Mi vida 💕',
-  'Mi felicidad 💖',
-  'Siempre juntos 🌷',
+  '💗You're my universe💗',
+  '❤️Te AMO❤️',
+  '🌸you're PERFECT🌸',
+  '💗My life forever💗',
+  '💓my gorgeous girl💓',
+  '💐Together forever💐',
 ];
 
 // ── Sección 1 — Carrusel de amor ─────────────
 const TOTAL_SLIDES_CARRUSEL = 10;
 const FRASES_AMOR_CARRUSEL = [
-  'Te amo con toda mi alma 💗',
-  'Eres la luz de mi vida ✨',
-  'Contigo todo es mejor 🌸',
-  'Eres mi sueño hecho realidad 💕',
-  'Por siempre juntos 💖',
-  'Eres mi razón de ser 🌷',
-  'Mi mundo eres tú 💫',
-  'Eres mi felicidad 💞',
-  'Te amo infinitamente 💝',
-  'Eres mi todo 🌺'
+  'tii AMOO mushote mi princeshita bella:3💗',
+  'eresh mi bellíshima luceshita de miel🥺💗✨',
+  'kontigo SIEMPRE woa sel muii FELISH😸💗💞',
+  'MI sueñito hesho realidad y mi realidad hesha sueñito^v^💓💤',
+  'SIEMPRE estaré bem juntito a ti FOREVER:)💗🌟',
+  'eresh toditita mi razhón de SER my gud baby🥺💗💐',
+  'SIEMPRE serásh toditito mi mundito entero🫶💗💞',
+  'eresh mi másh bellíshima MOTIVACIÓN HEHE:D🎉💓✨️',
+  'te ADORO kon mushísima PASIÓN!!(≧▽≦)💗💞',
+  'I love you very much FOREVER my gorgeous girl:)❤️✨️'
 ];
 
 // ── Menú (tarjetas) ── SOLO SECCIÓN 1 ────────
@@ -46,7 +46,7 @@ const MENU_OPCIONES = [
 ];
 
 // ── Modal final al completar ──────────────────
-const MENSAJE_FINAL_REGALO = '🎉 ¡Has completado el regalo! 🎉\n\nGracias por ser tú, por estar a mi lado, por ser mi compañera de vida. Eres el amor de mi vida y cada día a tu lado es un regalo. Te amo infinitamente. 💗';
+const MENSAJE_FINAL_REGALO = '🎉 ¡Has completado el regalo! 🎉\n\nMushash GRASHASH pol leersh mi bella kartita dedikadita a TI y pol disfrutash de mi regalito!!! TENKIUSSH SO MUCH pol sel SIEMPRE mi bellíshima y gloriosha DIOSITA PERFECTA k tqnto AMOO y ADORO mushísisisimo y kon toditito mi KORAZONSHITO de MIEL pol TI HEHE🥹💗🌸✨️';
 const IMAGEN_FINAL_REGALO  = 'assets/final/regalo_completo.webp';
 
 // ── Playlist (música) ─────────────────────────
