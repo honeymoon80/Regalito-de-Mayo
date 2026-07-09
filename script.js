@@ -27,7 +27,7 @@ const FRASES_CARRUSEL_AUTO = [
 ];
 
 // ── Sección 1 — Carrusel de amor ─────────────
-const TOTAL_SLIDES_CARRUSEL = 10;  // 👈 AHORA 10 IMÁGENES
+const TOTAL_SLIDES_CARRUSEL = 10;
 const FRASES_AMOR_CARRUSEL = [
   'Te amo con toda mi alma 💗',
   'Eres la luz de mi vida ✨',
@@ -119,7 +119,7 @@ const TRANSITIONS_LIST = [
 // ════════════════════════════════════════════
 // ESTADO GLOBAL
 // ════════════════════════════════════════════
-let giftClicks   = 0;        // clics en la carta de la pantalla inicial
+let giftClicks   = 0;
 let particlePool = [];
 const MAX_PARTICLES = 50;
 
@@ -167,7 +167,6 @@ const menuGrid      = document.getElementById('menuGrid');
 // INIT
 // ════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  // Aplicar textos configurables
   const titleEl = document.getElementById('introTitle');
   const subEl   = document.getElementById('introSubtitle');
   if (titleEl) titleEl.textContent = TITULO_CARTA_INICIAL;
@@ -176,12 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
   buildAutoCarousel();
   startIntroHearts();
 
-  // La carta abre con clics
   const handleGiftClick = () => openGiftClick();
   introCard.addEventListener('click',      handleGiftClick);
   introCard.addEventListener('touchstart', handleGiftClick, {passive:true});
 
-  // Partículas en fondo (secciones)
   document.addEventListener('click', e => {
     if (!mainApp || mainApp.classList.contains('hidden')) return;
     if (e.target.closest('button,input,select,textarea,.carta-adorno-wrap,.carta-final-img-wrap,.kw-word,.sobre-modal,.global-player,.menu-card')) return;
@@ -193,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     spawnParticles(e.touches[0].clientX, e.touches[0].clientY, 6, false);
   }, {passive:true});
 
-  // Música global
   globalAudio.volume = 0.7;
   if (PLAYLIST_REGALO.length) loadGlobalSong(0, false);
   gpPlayBtn.addEventListener('click', e => { e.stopPropagation(); toggleGlobalPlay(); });
@@ -222,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('modalCloseBtn')?.addEventListener('click', closeModal);
   document.getElementById('genericModal')?.addEventListener('click', e => { if (e.target === document.getElementById('genericModal')) closeModal(); });
 
-  // Botón atrás del móvil
   history.pushState({ page:'intro' }, '');
   window.addEventListener('popstate', () => {
     const openSec = document.querySelector('.sec-panel:not(.hidden)');
@@ -239,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function openGiftClick() {
   giftClicks++;
 
-  // Actualizar barra y label
   const bar = document.getElementById('giftProgressBar');
   const lbl = document.getElementById('giftClickLabel');
   if (bar) bar.style.width = (giftClicks / CLICS_NECESARIOS * 100) + '%';
@@ -247,11 +241,9 @@ function openGiftClick() {
     ? `¡Ya casi! ${giftClicks} / ${CLICS_NECESARIOS} 💗`
     : '¡Abriendo...! 💖';
 
-  // La carta crece ligeramente con cada clic (efecto de apertura progresiva)
   const scaleProgress = 1 + (giftClicks / CLICS_NECESARIOS) * 0.08;
   introCard.style.transform = `scale(${Math.min(scaleProgress, 1.08)})`;
 
-  // Pequeñas partículas en cada clic para feedback visual
   if (giftClicks % 4 === 0) {
     const r = introCard.getBoundingClientRect();
     spawnParticles(r.left + r.width/2, r.top + r.height/2, 5, false);
@@ -398,7 +390,6 @@ function initSec1() {
     carousel.appendChild(slide);
   }
 
-  // Swipe táctil
   let tx = 0;
   carousel.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
   carousel.addEventListener('touchend',   e => {
@@ -478,13 +469,11 @@ function initSec2() {
   const container = document.getElementById('sec2Container');
   if (!container || container.children.length) return;
 
-  // Procesar el texto: reemplazar [IMAGEN:N] e insertar imágenes adorno
   const parts = CARTA_AMOR_TEXTO.split(/\[IMAGEN:(\d+)\]/g);
   let processedHtml = '';
 
   for (let i = 0; i < parts.length; i++) {
     if (i % 2 === 0) {
-      // Texto normal: resaltar palabras clave
       let text = parts[i];
       const sorted = [...PALABRAS_CLAVE_CARTA].sort((a, b) => b.palabra.length - a.palabra.length);
       sorted.forEach(pk => {
@@ -494,7 +483,6 @@ function initSec2() {
       text = text.replace(/\n\n/g, '</p><p style="margin:10px 0">').replace(/\n/g, '<br>');
       processedHtml += `<p style="margin:0">${text}</p>`;
     } else {
-      // Marcador de imagen adorno
       const imgIdx = parseInt(parts[i]) - 1;
       const adorno = IMAGENES_ADORNO_CARTA[imgIdx];
       if (adorno) {
@@ -510,7 +498,6 @@ function initSec2() {
     }
   }
 
-  // Imagen final al fondo de la carta
   processedHtml += `
     <div class="carta-final-img-wrap" id="cartaFinalImgWrap">
       <img class="carta-final-img" src="${IMAGEN_FINAL_CARTA}" alt="Carta final"
@@ -526,7 +513,6 @@ function initSec2() {
       </p>
     </div>`;
 
-  // Eventos palabras clave
   container.querySelectorAll('.kw-word').forEach(el => {
     el.addEventListener('click', () => {
       const kw = el.dataset.kw;
@@ -539,7 +525,6 @@ function initSec2() {
     });
   });
 
-  // Eventos imágenes adorno
   container.querySelectorAll('.carta-adorno-wrap').forEach(el => {
     el.addEventListener('click', () => {
       const idx    = parseInt(el.dataset.adorno);
@@ -551,7 +536,6 @@ function initSec2() {
     });
   });
 
-  // Imagen final
   container.querySelector('#cartaFinalImgWrap')?.addEventListener('click', () => {
     sec2FinalClicked = true;
     openSobre(IMAGEN_FINAL_CARTA, TITULO_FINAL_CARTA, MENSAJE_FINAL_CARTA);
@@ -611,7 +595,6 @@ function closeSobre() {
   document.getElementById('sobreFlap')?.classList.remove('open');
 }
 
-// Modal genérico (para compatibilidad de estructura)
 function openModal(html) {
   const gm = document.getElementById('genericModal');
   const mc = document.getElementById('modalContent');
@@ -792,7 +775,6 @@ function showNotif(msg) {
   notifTimer = setTimeout(() => globalNotif.classList.remove('show'), 3500);
 }
 
-// Limpieza al redimensionar
 window.addEventListener('resize', () => {
   particlePool.forEach(p => { if (!document.body.contains(p)) p.remove(); });
   particlePool = particlePool.filter(p => document.body.contains(p));
