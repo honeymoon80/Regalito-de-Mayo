@@ -1,7 +1,5 @@
 /* =============================================
-   SCRIPT.JS — Regalo de Amor
-   Base: código de la página de disculpas,
-   adaptado para un regalo romántico.
+   SCRIPT.JS — Regalo de Amor (SOLO SECCIÓN 1)
    ============================================= */
 'use strict';
 
@@ -41,60 +39,13 @@ const FRASES_AMOR_CARRUSEL = [
   'Eres mi todo 🌺'
 ];
 
-// ── Sección 2 — Carta de amor ────────────────
-// Usa [IMAGEN:N] para insertar imágenes adorno
-const CARTA_AMOR_TEXTO = `Mi amor... Desde que llegaste a mi vida, todo cambió para siempre.
-
-[IMAGEN:1]
-
-Cada BESO tuyo es mágico, cada ABRAZO tuyo es mi lugar seguro en el mundo entero.
-
-[IMAGEN:2]
-
-Eres el AMOR de mi vida, mi razón de ser, mi FELICIDAD eterna. GRACIAS por existir.
-
-[IMAGEN:3]
-
-TE AMO más que a nada en este mundo, hoy, mañana y siempre.`;
-
-// Palabras clave resaltadas en la carta (deben aparecer en CARTA_AMOR_TEXTO)
-const PALABRAS_CLAVE_CARTA = [
-  { palabra:'BESO',       titulo:'Un beso para ti',     mensaje:'Cada beso tuyo es magia pura 💋',               imagen:'assets/palabras_carta/palabra1.webp' },
-  { palabra:'ABRAZO',     titulo:'Un abrazo eterno',    mensaje:'Tus abrazos son mi lugar más seguro 🤗',        imagen:'assets/palabras_carta/palabra2.webp' },
-  { palabra:'AMOR',       titulo:'Nuestro amor',        mensaje:'Eres el amor de mi vida, mi todo 💗',           imagen:'assets/palabras_carta/palabra3.webp' },
-  { palabra:'FELICIDAD',  titulo:'Mi felicidad',        mensaje:'Tú eres mi felicidad absoluta ✨',              imagen:'assets/palabras_carta/palabra4.webp' },
-  { palabra:'GRACIAS',    titulo:'Gracias por todo',    mensaje:'Gracias por existir y hacer mi vida perfecta 🌸',imagen:'assets/palabras_carta/palabra5.webp' },
-  { palabra:'TE AMO',     titulo:'Te amo',              mensaje:'Te amo más que a nada en este mundo 💞',        imagen:'assets/palabras_carta/palabra6.webp' },
-];
-
-// Imágenes adorno visibles dentro de la carta
-const IMAGENES_ADORNO_CARTA = [
-  { imagenMini:'assets/carta_imagenes/adorno1.webp', imagenMax:'assets/carta_imagenes/adorno1_max.webp', titulo:'El comienzo',    frase:'Nuestro primer recuerdo juntos, el inicio de todo 💗' },
-  { imagenMini:'assets/carta_imagenes/adorno2.webp', imagenMax:'assets/carta_imagenes/adorno2_max.webp', titulo:'Mi promesa',     frase:'Siempre a tu lado, en las buenas y en las malas 🌸' },
-  { imagenMini:'assets/carta_imagenes/adorno3.webp', imagenMax:'assets/carta_imagenes/adorno3_max.webp', titulo:'Nuestro futuro', frase:'Construyamos juntos el futuro más hermoso 💖' },
-];
-
-// Imagen final al final de la carta
-const IMAGEN_FINAL_CARTA  = 'assets/final/regalo_final.webp';
-const MENSAJE_FINAL_CARTA = 'Gracias por ser mi todo. Te amo infinitamente. 💗';
-const TITULO_FINAL_CARTA  = 'Con todo mi amor';
-
-// Playlist (solo MP3)
-const PLAYLIST_REGALO = [
-  { name:'Nuestra Canción 1 ♪', src:'assets/songs/song1.mp3' },
-  { name:'Nuestra Canción 2 ♪', src:'assets/songs/song2.mp3' },
-  { name:'Nuestra Canción 3 ♪', src:'assets/songs/song3.mp3' },
-  { name:'Nuestra Canción 4 ♪', src:'assets/songs/song4.mp3' },
-  { name:'Nuestra Canción 5 ♪', src:'assets/songs/song5.mp3' },
-];
-
-// Menú (tarjetas)
+// ── Menú (tarjetas) ── SOLO SECCIÓN 1 ────────
 const MENU_OPCIONES = [
   { img:'assets/menu/menu1.webp', emoji:'💌', titulo:'Carrusel de Amor', seccion:1 },
-  { img:'assets/menu/menu2.webp', emoji:'💝', titulo:'Carta de Amor',    seccion:2 },
+  // SECCIÓN 2 DESHABILITADA
 ];
 
-// Modal final al completar el 100%
+// ── Modal final al completar ──────────────────
 const MENSAJE_FINAL_REGALO = '🎉 ¡Has completado el regalo! 🎉\n\nGracias por ser tú, por estar a mi lado, por ser mi compañera de vida. Eres el amor de mi vida y cada día a tu lado es un regalo. Te amo infinitamente. 💗';
 const IMAGEN_FINAL_REGALO  = 'assets/final/regalo_completo.webp';
 
@@ -132,11 +83,7 @@ let sec1TransIdx     = 0;
 let sec1Transitioning= false;
 let sec1SlidesViewed = new Set();
 
-let progress = { sec1: false, sec2: false };
-let sec2KwClicked    = new Set();
-let sec2ImgClicked   = new Set();
-let sec2FinalClicked = false;
-let sec2Completed    = false;
+let progress = { sec1: false };
 
 // DOM refs
 const introScreen   = document.getElementById('introScreen');
@@ -181,40 +128,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('click', e => {
     if (!mainApp || mainApp.classList.contains('hidden')) return;
-    if (e.target.closest('button,input,select,textarea,.carta-adorno-wrap,.carta-final-img-wrap,.kw-word,.sobre-modal,.global-player,.menu-card')) return;
+    if (e.target.closest('button,input,select,textarea,.menu-card')) return;
     spawnParticles(e.clientX, e.clientY, 6, false);
   });
   document.addEventListener('touchstart', e => {
     if (!mainApp || mainApp.classList.contains('hidden')) return;
-    if (e.target.closest('button,input,select,textarea,.carta-adorno-wrap,.carta-final-img-wrap,.kw-word,.sobre-modal,.global-player,.menu-card')) return;
+    if (e.target.closest('button,input,select,textarea,.menu-card')) return;
     spawnParticles(e.touches[0].clientX, e.touches[0].clientY, 6, false);
   }, {passive:true});
 
-  globalAudio.volume = 0.7;
-  if (PLAYLIST_REGALO.length) loadGlobalSong(0, false);
-  gpPlayBtn.addEventListener('click', e => { e.stopPropagation(); toggleGlobalPlay(); });
-  gpPrevBtn.addEventListener('click', e => { e.stopPropagation(); changeGlobalSong(-1); });
-  gpNextBtn.addEventListener('click', e => { e.stopPropagation(); changeGlobalSong(1); });
-  gpToggleBtn.addEventListener('click', e => { e.stopPropagation(); toggleGP(); });
-  globalAudio.addEventListener('timeupdate', updateAudioProgress);
-  globalAudio.addEventListener('ended', () => changeGlobalSong(1));
-  globalAudio.addEventListener('play',  () => { globalPlaying=true;  gpPlayBtn.textContent='⏸'; });
-  globalAudio.addEventListener('pause', () => { globalPlaying=false; gpPlayBtn.textContent='▶'; });
-  if (gpProgressTrack) {
-    gpProgressTrack.addEventListener('click', e => {
-      e.stopPropagation();
-      if (!globalAudio.duration) return;
-      const r = gpProgressTrack.getBoundingClientRect();
-      globalAudio.currentTime = ((e.clientX - r.left) / r.width) * globalAudio.duration;
-    });
-  }
-  if (gpVolSlider) gpVolSlider.addEventListener('input', e => {
-    e.stopPropagation();
-    globalAudio.volume = e.target.value;
-    const pct = e.target.value * 100;
-    e.target.style.background = `linear-gradient(90deg,var(--pink-main) ${pct}%,rgba(251,182,206,0.4) ${pct}%)`;
-  });
-
+  // Música simplificada
   document.getElementById('modalCloseBtn')?.addEventListener('click', closeModal);
   document.getElementById('genericModal')?.addEventListener('click', e => { if (e.target === document.getElementById('genericModal')) closeModal(); });
 
@@ -266,7 +189,6 @@ function abrirRegalo() {
     mainApp.classList.remove('hidden');
     buildMenu();
     startMainHearts();
-    initMusic();
     updateProgressUI();
     history.pushState({ page:'menu' }, '');
   }, 850);
@@ -284,6 +206,7 @@ function buildAutoCarousel() {
     slide.className = 'auto-slide' + (i === 0 ? ' active-slide' : '');
     slide.innerHTML = `
       <img src="assets/regalo_carrusel/regalo${i+1}.webp" alt="regalo ${i+1}" loading="${i===0?'eager':'lazy'}"
+           style="width:100%;height:100%;object-fit:cover"
            onerror="this.style.minHeight='120px';this.removeAttribute('src')">
       <div class="auto-slide-overlay">${FRASES_CARRUSEL_AUTO[i] || ''}</div>`;
     container.appendChild(slide);
@@ -326,10 +249,17 @@ function openSection(sec) {
   document.getElementById('mainMenu')?.classList.add('hidden');
   const panel = document.getElementById(`sec${sec}`);
   if (!panel) return;
+  
+  // Si intenta abrir sección 2 (deshabilitada)
+  if (sec === 2) {
+    document.getElementById('mainMenu')?.classList.remove('hidden');
+    showNotif('💗 Solo el Carrusel de Amor está disponible');
+    return;
+  }
+  
   panel.classList.remove('hidden');
   panel.scrollTop = 0;
   if (sec === 1) initSec1();
-  if (sec === 2) initSec2();
   history.pushState({ page:`sec${sec}`, sec }, '');
 }
 
@@ -345,14 +275,18 @@ function completeSection(sec) {
   updateProgressUI();
   showNotif(`💗 ¡Sección ${sec} completada!`);
   launchConfetti(60);
-  if (progress.sec1 && progress.sec2) setTimeout(openFinalModal, 800);
+  
+  // Al completar la sección 1, abre el modal final
+  if (progress.sec1) {
+    setTimeout(openFinalModal, 800);
+  }
 }
 
 function updateProgressUI() {
-  const done = (progress.sec1 ? 1 : 0) + (progress.sec2 ? 1 : 0);
-  const pct  = Math.round(done / 2 * 100);
+  const done = (progress.sec1 ? 1 : 0);
+  const pct  = Math.round(done / 1 * 100);
   if (gpBarInner) gpBarInner.style.width = pct + '%';
-  if (gpLabel)    gpLabel.textContent = `Progreso: ${done}/2 secciones`;
+  if (gpLabel)    gpLabel.textContent = `Progreso: ${done}/1 sección`;
   if (gpPct)      gpPct.textContent   = pct + '%';
 }
 
@@ -463,138 +397,8 @@ function updateSec1Progress() {
 }
 
 // ════════════════════════════════════════════
-// SECCIÓN 2 — CARTA INTERACTIVA DE AMOR
+// MODAL GENÉRICO
 // ════════════════════════════════════════════
-function initSec2() {
-  const container = document.getElementById('sec2Container');
-  if (!container || container.children.length) return;
-
-  const parts = CARTA_AMOR_TEXTO.split(/\[IMAGEN:(\d+)\]/g);
-  let processedHtml = '';
-
-  for (let i = 0; i < parts.length; i++) {
-    if (i % 2 === 0) {
-      let text = parts[i];
-      const sorted = [...PALABRAS_CLAVE_CARTA].sort((a, b) => b.palabra.length - a.palabra.length);
-      sorted.forEach(pk => {
-        const re = new RegExp(`(${escapeRegex(pk.palabra)})`, 'g');
-        text = text.replace(re, `<span class="kw-word" data-kw="${pk.palabra}">$1</span>`);
-      });
-      text = text.replace(/\n\n/g, '</p><p style="margin:10px 0">').replace(/\n/g, '<br>');
-      processedHtml += `<p style="margin:0">${text}</p>`;
-    } else {
-      const imgIdx = parseInt(parts[i]) - 1;
-      const adorno = IMAGENES_ADORNO_CARTA[imgIdx];
-      if (adorno) {
-        processedHtml += `
-          <div class="carta-adorno-wrap" data-adorno="${imgIdx}">
-            <div>
-              <img class="carta-adorno-img" src="${adorno.imagenMini}" alt="${adorno.titulo}"
-                   onerror="this.style.background='linear-gradient(135deg,var(--pink-pale),var(--blush))';this.removeAttribute('src')">
-              <div class="carta-adorno-caption">✨ ${adorno.titulo} — toca para ver ✨</div>
-            </div>
-          </div>`;
-      }
-    }
-  }
-
-  processedHtml += `
-    <div class="carta-final-img-wrap" id="cartaFinalImgWrap">
-      <img class="carta-final-img" src="${IMAGEN_FINAL_CARTA}" alt="Carta final"
-           onerror="this.style.background='linear-gradient(135deg,var(--pink-pale),var(--blush))';this.removeAttribute('src')">
-      <div class="carta-final-caption">💗 ${MENSAJE_FINAL_CARTA} 💗</div>
-    </div>`;
-
-  container.innerHTML = `
-    <div class="carta-disculpa-wrap">
-      <div class="carta-paper" id="cartaPaper">${processedHtml}</div>
-      <p style="text-align:center;font-family:var(--font-script);font-size:0.9rem;color:var(--text-mid);margin:10px 0 0;font-style:italic">
-        💗 Toca las palabras resaltadas y las imágenes para descubrir mensajes especiales 💗
-      </p>
-    </div>`;
-
-  container.querySelectorAll('.kw-word').forEach(el => {
-    el.addEventListener('click', () => {
-      const kw = el.dataset.kw;
-      const pk = PALABRAS_CLAVE_CARTA.find(p => p.palabra === kw);
-      if (!pk) return;
-      el.classList.add('clicked');
-      sec2KwClicked.add(kw);
-      openSobre(pk.imagen, pk.titulo, pk.mensaje);
-      checkSec2Complete();
-    });
-  });
-
-  container.querySelectorAll('.carta-adorno-wrap').forEach(el => {
-    el.addEventListener('click', () => {
-      const idx    = parseInt(el.dataset.adorno);
-      const adorno = IMAGENES_ADORNO_CARTA[idx];
-      if (!adorno) return;
-      sec2ImgClicked.add(idx);
-      openSobre(adorno.imagenMax, adorno.titulo, adorno.frase);
-      checkSec2Complete();
-    });
-  });
-
-  container.querySelector('#cartaFinalImgWrap')?.addEventListener('click', () => {
-    sec2FinalClicked = true;
-    openSobre(IMAGEN_FINAL_CARTA, TITULO_FINAL_CARTA, MENSAJE_FINAL_CARTA);
-    checkSec2Complete();
-  });
-}
-
-function escapeRegex(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function checkSec2Complete() {
-  if (sec2Completed) return;
-  const allKw  = PALABRAS_CLAVE_CARTA.every(pk => sec2KwClicked.has(pk.palabra));
-  const allImg = IMAGENES_ADORNO_CARTA.every((_, i) => sec2ImgClicked.has(i));
-  if (allKw && allImg && sec2FinalClicked) {
-    sec2Completed = true;
-    completeSection(2);
-  }
-}
-
-// ════════════════════════════════════════════
-// MODAL SOBRE ANIMADO
-// ════════════════════════════════════════════
-function openSobre(imgSrc, titulo, frase) {
-  const modal    = document.getElementById('sobreModal');
-  const envelope = document.getElementById('sobreEnvelope');
-  const flap     = document.getElementById('sobreFlap');
-  const content  = document.getElementById('sobreContent');
-  const sobreImg = document.getElementById('sobreImg');
-  const sobreTit = document.getElementById('sobreTitulo');
-  const sobreF   = document.getElementById('sobreFrase');
-
-  flap.classList.remove('open');
-  content.style.display = 'none';
-  envelope.style.display = 'block';
-  sobreImg.src           = imgSrc || '';
-  sobreTit.textContent   = titulo  || '';
-  sobreF.textContent     = frase   || '';
-
-  modal.classList.remove('hidden');
-
-  setTimeout(() => {
-    flap.classList.add('open');
-    setTimeout(() => {
-      envelope.style.display = 'none';
-      content.style.display  = 'block';
-      spawnParticles(window.innerWidth/2, window.innerHeight/3, 12, false);
-    }, 650);
-  }, 400);
-}
-
-function closeSobre() {
-  document.getElementById('sobreModal')?.classList.add('hidden');
-  document.getElementById('sobreContent').style.display  = 'none';
-  document.getElementById('sobreEnvelope').style.display = 'block';
-  document.getElementById('sobreFlap')?.classList.remove('open');
-}
-
 function openModal(html) {
   const gm = document.getElementById('genericModal');
   const mc = document.getElementById('modalContent');
@@ -605,57 +409,6 @@ function openModal(html) {
 function closeModal() {
   document.getElementById('genericModal')?.classList.add('hidden');
   document.getElementById('modalContent').innerHTML = '';
-}
-
-// ════════════════════════════════════════════
-// MÚSICA GLOBAL
-// ════════════════════════════════════════════
-function initMusic() {
-  if (!PLAYLIST_REGALO.length) return;
-  loadGlobalSong(0, false);
-  const tryPlay = () => {
-    globalAudio.play().catch(() => {});
-    document.removeEventListener('click',      tryPlay);
-    document.removeEventListener('touchstart', tryPlay);
-  };
-  document.addEventListener('click',      tryPlay, {once:true});
-  document.addEventListener('touchstart', tryPlay, {once:true, passive:true});
-  setTimeout(() => globalAudio.play().catch(() => {}), 400);
-}
-
-function loadGlobalSong(idx, play = true) {
-  globalSongIdx = ((idx % PLAYLIST_REGALO.length) + PLAYLIST_REGALO.length) % PLAYLIST_REGALO.length;
-  const s = PLAYLIST_REGALO[globalSongIdx];
-  globalAudio.src = s.src;
-  if (gpSongName) gpSongName.textContent = s.name;
-  if (gpSongNum)  gpSongNum.textContent  = `${globalSongIdx+1}/${PLAYLIST_REGALO.length}`;
-  if (play && globalPlaying) globalAudio.play().catch(() => {});
-  updateAudioProgress();
-}
-
-function toggleGlobalPlay() {
-  if (globalPlaying) globalAudio.pause();
-  else globalAudio.play().catch(() => {});
-}
-function changeGlobalSong(dir) { loadGlobalSong(globalSongIdx + dir, true); }
-
-function updateAudioProgress() {
-  if (!globalAudio.duration) return;
-  const pct = globalAudio.currentTime / globalAudio.duration * 100;
-  if (gpProgressFill)  gpProgressFill.style.width = pct + '%';
-  if (gpProgressThumb) gpProgressThumb.style.left  = pct + '%';
-  if (gpCurTime)   gpCurTime.textContent   = fmtTime(globalAudio.currentTime);
-  if (gpTotalTime) gpTotalTime.textContent = fmtTime(globalAudio.duration);
-}
-
-function fmtTime(s) {
-  if (isNaN(s)) return '0:00';
-  const m = Math.floor(s/60), ss = Math.floor(s%60);
-  return m + ':' + (ss < 10 ? '0' : '') + ss;
-}
-function toggleGP() {
-  gpMinimized = !gpMinimized;
-  gpPanel?.classList.toggle('minimized', gpMinimized);
 }
 
 // ════════════════════════════════════════════
