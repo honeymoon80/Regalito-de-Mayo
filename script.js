@@ -27,13 +27,18 @@ const FRASES_CARRUSEL_AUTO = [
 ];
 
 // ── Sección 1 — Carrusel de amor ─────────────
-const TOTAL_SLIDES_CARRUSEL = 5;
+const TOTAL_SLIDES_CARRUSEL = 10;  // 👈 AHORA 10 IMÁGENES
 const FRASES_AMOR_CARRUSEL = [
   'Te amo con toda mi alma 💗',
   'Eres la luz de mi vida ✨',
   'Contigo todo es mejor 🌸',
   'Eres mi sueño hecho realidad 💕',
   'Por siempre juntos 💖',
+  'Eres mi razón de ser 🌷',
+  'Mi mundo eres tú 💫',
+  'Eres mi felicidad 💞',
+  'Te amo infinitamente 💝',
+  'Eres mi todo 🌺'
 ];
 
 // ── Sección 2 — Carta de amor ────────────────
@@ -372,7 +377,7 @@ function openFinalModal() {
 function closeFinalModal() { document.getElementById('finalModal')?.classList.add('hidden'); }
 
 // ════════════════════════════════════════════
-// SECCIÓN 1 — CARRUSEL DE AMOR
+// SECCIÓN 1 — CARRUSEL DE AMOR (10 IMÁGENES)
 // ════════════════════════════════════════════
 function initSec1() {
   const carousel = document.getElementById('sec1Carousel');
